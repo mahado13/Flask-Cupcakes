@@ -5,7 +5,7 @@ Assignment: Flask app for Cupcakes
 """
 import re
 from flask import Flask, redirect, request, jsonify, render_template
-from models import db, connect_db, 
+from models import db, connect_db, Cupcake
 
 app = Flask(__name__)
 
@@ -14,6 +14,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "secret-1-2-3"
 
 connect_db(app)
-@app.rout('/')
+@app.route('/')
 def index():
     return render_template()
