@@ -16,4 +16,32 @@ app.config['SECRET_KEY'] = "secret-1-2-3"
 connect_db(app)
 @app.route('/')
 def index():
-    return render_template()
+    return render_template("index.html")
+
+@app.route('/api/cupcakes')
+def show_cupcakes():
+    """Viewing the entire list of cupcakes"""
+    all_cupcakes = [cupcake.serialize() for cupcake in Cupcake.query.all()]
+    return jsonify(cupcakes = all_cupcakes)
+
+@app.route('/api/cupcakes/<int:cupcake_id>')
+def get_cupcake(cupcake_id):
+    """Route handler for viewing information on a single cupcake"""
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+    return jsonify(cupcake = cupcake.serialize())
+
+@app.route('/api/cupcakes', methods=['POST'])
+def add_cupcake():
+    """Route handler for adding a new cupcake"""
+    new_cupcake = Cupcake(
+            flavor=request.json["flavor"],
+            size= request.json["size"],
+            rating= request.json["rating"],
+            image= request.json.get("image")
+            )
+    db.session.add(new_cupcake)
+    db.session.commit()
+
+    response_json = jsonify(newcupcake =new_cupcake.serialize())
+
+    return (response_json, 201)

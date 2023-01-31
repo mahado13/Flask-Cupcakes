@@ -3,8 +3,8 @@ Author: Mahad Osman
 Date: Jan 31 2021
 wodels for Cupcake app.
 """
-from traitlets import default
 from flask_sqlalchemy import SQLAlchemy
+
 db = SQLAlchemy()
 
 def connect_db(app):

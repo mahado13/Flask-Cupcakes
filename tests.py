@@ -61,7 +61,7 @@ class CupcakeViewsTestCase(TestCase):
                         "id": self.cupcake.id,
                         "flavor": "TestFlavor",
                         "size": "TestSize",
-                        "rating": 5,
+                        "rating": 5.0,
                         "image": "http://test.com/cupcake.jpg"
                     }
                 ]
@@ -79,7 +79,7 @@ class CupcakeViewsTestCase(TestCase):
                     "id": self.cupcake.id,
                     "flavor": "TestFlavor",
                     "size": "TestSize",
-                    "rating": 5,
+                    "rating": 5.0,
                     "image": "http://test.com/cupcake.jpg"
                 }
             })
@@ -94,11 +94,11 @@ class CupcakeViewsTestCase(TestCase):
             data = resp.json
 
             # don't know what ID we'll get, make sure it's an int & normalize
-            self.assertIsInstance(data['cupcake']['id'], int)
-            del data['cupcake']['id']
+            self.assertIsInstance(data['newcupcake']['id'], int)
+            del data['newcupcake']['id']
 
             self.assertEqual(data, {
-                "cupcake": {
+                "newcupcake": {
                     "flavor": "TestFlavor2",
                     "size": "TestSize2",
                     "rating": 10,
