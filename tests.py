@@ -28,6 +28,14 @@ CUPCAKE_DATA_2 = {
     "image": "http://test.com/cupcake2.jpg"
 }
 
+CUPCAKE_DATA_3 = {
+    "flavor": "TestFlavor3",
+    "size": "TestSize3",
+    "rating": 12,
+    "image": "http://test.com/cupcake2.jpg"
+}
+
+
 
 class CupcakeViewsTestCase(TestCase):
     """Tests for views of API."""
@@ -107,3 +115,46 @@ class CupcakeViewsTestCase(TestCase):
             })
 
             self.assertEqual(Cupcake.query.count(), 2)
+
+    def test_edit_cupcake(self):
+        """testing the editing of a cupcake"""
+        with app.test_client() as client:
+            url = f"/api/cupcakes/{self.cupcake.id}"
+            resp = client.patch(url,json =CUPCAKE_DATA_3)
+
+            self.assertEqual(resp.status_code, 201)
+
+            data = resp.json
+
+            #Following the above example to make sure it is an int & normalize it 
+            self.assertIsInstance(data['cupcake']['id'], int)
+            del data['cupcake']['id']
+
+            self.assertEqual(data, {
+                "cupcake": {
+                    "flavor": "TestFlavor3",
+                    "size": "TestSize3",
+                    "rating": 12,
+                    "image": "http://test.com/cupcake2.jpg"
+                }
+            })
+
+            #Confirming that the only cupcake has been edited.
+            self.assertEqual(Cupcake.query.count(), 1)
+    
+    def test_delete_cupcake(self):
+        """testing the deletion of a cupcake"""
+        with app.test_client() as client:
+            url = f"/api/cupcakes/{self.cupcake.id}"
+            resp = client.delete(url)
+
+            self.assertEqual(resp.status_code, 200)
+            data = resp.json
+            self.assertEqual(data, {
+                   
+                     "msg": "deleted"
+                
+            })
+
+            self.assertNotEqual(Cupcake.query.count(), 1)
+
